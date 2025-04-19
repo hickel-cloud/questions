@@ -21,9 +21,9 @@ if materia:
                     correto = resposta == q["gabarito"]
                     if correto:
                         st.success("Resposta correta!")
+                        st.info(f"Justificativa: {q['justificativa']}")
                     else:
                         st.error("Resposta errada.")
-                    st.info(f"Justificativa: {q['justificativa']}")
                     registrar_resposta(q["id"], correto)
 
                 total = q["acertos"] + q["erros"]
