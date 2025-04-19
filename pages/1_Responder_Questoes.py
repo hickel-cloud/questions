@@ -16,7 +16,7 @@ if materia:
         for q in questoes:
             with st.expander(f"Questão {q['ordem']}"):
                 st.write(q["assertiva"])
-                resposta = st.radio("Sua resposta:", ["Certo", "Errado"], key=f"resposta_{q['id']}")
+                resposta = st.radio("Sua resposta:", ["Certo", "Errado"], index=None, key=f"resposta_{q['id']}")
                 if st.button("Confirmar", key=f"confirmar_{q['id']}"):
                     correto = resposta == q["gabarito"]
                     if correto:
@@ -25,9 +25,3 @@ if materia:
                     else:
                         st.error("Resposta errada.")
                     registrar_resposta(q["id"], correto)
-
-                total = q["acertos"] + q["erros"]
-                if total > 0:
-                    pct = round(100 * q["acertos"] / total, 1)
-                    st.progress(pct / 100)
-                    st.caption(f"Taxa de acertos: {pct}%")

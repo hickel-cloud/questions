@@ -9,6 +9,8 @@ if "assertiva" not in st.session_state:
     st.session_state.assertiva = ""
 if "justificativa" not in st.session_state:
     st.session_state.justificativa = ""
+if "gabarito" not in st.session_state:
+        st.session_state.gabarito = None
 
 
 materias = ['ALP', 'DHU', 'EDA', 'EFV', 'FPD','FTR','PER', 'PLF', 'RLH']
@@ -55,26 +57,38 @@ if materia:
 
     if assunto:
         st.session_state.assertiva = st.text_area("Assertiva", value=st.session_state.assertiva, key="assertiva_input")
-        st.session_state.gabarito = st.radio("Gabarito", ["Certo", "Errado"], index=None, horizontal=True, key="gabarito_input")
+        gabarito_opcoes = ["Certo", "Errado"]
+        st.session_state.gabarito = st.radio(
+                "Gabarito", 
+                gabarito_opcoes, 
+                index=gabarito_opcoes.index(st.session_state.gabarito) if st.session_state.gabarito in gabarito_opcoes else None,
+                horizontal=True, 
+                key="gabarito_input"
+            )
         st.session_state.justificativa = st.text_area("Justificativa", value=st.session_state.justificativa, key="justificativa_input")
 
         if st.button("Salvar Questão"):
-            adicionar_questao(materia, 
-                              assunto, 
-                              st.session_state.assertiva, 
-                              st.session_state.gabarito, 
-                              st.session_state.justificativa)
-            st.success("Questão adicionada com sucesso!")
+            if not st.session_state.gabarito:
+                st.warning("Selecione um gabarito antes de salvar a questão.")
+            elif not st.session_state.assertiva.strip() or not st.session_state.justificativa.strip():
+                st.warning("Preencha todos os campos antes de salvar.")
+            else:
+                adicionar_questao(materia, 
+                                assunto, 
+                                st.session_state.assertiva, 
+                                st.session_state.gabarito, 
+                                st.session_state.justificativa)
+                st.success("Questão adicionada com sucesso!")
 
-            sleep(1.5)
+                sleep(1.5)
 
-            st.cache_data.clear()
+                st.cache_data.clear()
 
-            st.session_state.assertiva = ""
-            st.session_state.justificativa = ""
-
-            
-            # Força a interface a atualizar os campos
-            st.rerun()
+                st.session_state.assertiva = ""
+                st.session_state.justificativa = ""
+                st.session_state.gabarito = None
+                
+                # Força a interface a atualizar os campos
+                st.rerun()
 
             
