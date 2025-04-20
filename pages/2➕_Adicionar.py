@@ -4,6 +4,15 @@ from src.utils import adicionar_questao
 
 st.header("➕ Adicionar Nova Questão")
 
+if "logado" not in st.session_state or not st.session_state["logado"]:
+    st.warning("Você precisa estar logado para acessar esta página. Acesse a página app no menu lateral e realize o login.")
+    st.stop()
+
+st.sidebar.title(f"Bem-vindo, {st.session_state['usuario']}")
+if st.sidebar.button("Sair"):
+    st.session_state.clear()
+    st.rerun()
+
 # States para limpar campos após submissão
 if "assertiva" not in st.session_state:
     st.session_state.assertiva = ""

@@ -1,7 +1,17 @@
 import streamlit as st
 from src.utils import get_materias, get_assuntos, get_questoes_filtradas, registrar_resposta
 
+
 st.header("📝 Responder Questões")
+
+if "logado" not in st.session_state or not st.session_state["logado"]:
+    st.warning("Você precisa estar logado para acessar esta página. Acesse a página app no menu lateral e realize o login.")
+    st.stop()
+
+st.sidebar.title(f"Bem-vindo, {st.session_state['usuario']}")
+if st.sidebar.button("Sair"):
+    st.session_state.clear()
+    st.rerun()
 
 materias = get_materias()
 materia = st.selectbox("Matéria", materias)
