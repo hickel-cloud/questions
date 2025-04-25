@@ -47,8 +47,8 @@ if materia:
                 '20. TRABALHO ESCRAVO CONTEMPORÂNEO'],
         'EDA': ['1. O TRÁFICO DE DROGAS E O CRIME ORGANIZADO NO BRASIL',
                 '2. DAS DROGAS',
-                '3. DAS REGIÕES PRODUTORAS E DAS ROTAS DO TRÁFICO DE DROGAS, ARMAS E MUNIÇÕES'],
-                '4 DA ENTREVISTA'
+                '3. DAS REGIÕES PRODUTORAS E DAS ROTAS DO TRÁFICO DE DROGAS, ARMAS E MUNIÇÕES',
+                '4 DA ENTREVISTA'],
         'EFV': ['1. HISTÓRICO DA IDENTIFICAÇÃO VEICULAR NO BRASIL', 
                 '2. IDENTIFICAÇÃO VEICULAR',
                 '3. DOCUMENTOS ELETRÔNICOS', 
@@ -86,40 +86,104 @@ if materia:
     assuntos_add = dict_assuntos[materia]
     assunto = st.selectbox("Assunto", assuntos_add)
 
-    if assunto:
-        st.session_state.assertiva = st.text_area("Assertiva", value=st.session_state.assertiva, key="assertiva_input")
-        gabarito_opcoes = ["Certo", "Errado"]
-        st.session_state.gabarito = st.radio(
-                "Gabarito", 
-                gabarito_opcoes, 
-                index=gabarito_opcoes.index(st.session_state.gabarito) if st.session_state.gabarito in gabarito_opcoes else None,
-                horizontal=True, 
-                key="gabarito_input"
-            )
-        st.session_state.justificativa = st.text_area("Justificativa", value=st.session_state.justificativa, key="justificativa_input")
+#     if assunto:
+#         st.session_state.assertiva = st.text_area("Assertiva", value=st.session_state.assertiva, key="assertiva_input")
+        
+#         # Colunas para os checkboxes estilizados
+#         col1, col2 = st.columns(2)
 
-        if st.button("Salvar Questão"):
-            if not st.session_state.gabarito:
-                st.warning("Selecione um gabarito antes de salvar a questão.")
-            elif not st.session_state.assertiva.strip() or not st.session_state.justificativa.strip():
-                st.warning("Preencha todos os campos antes de salvar.")
-            else:
-                adicionar_questao(materia, 
-                                assunto, 
-                                st.session_state.assertiva, 
-                                st.session_state.gabarito, 
-                                st.session_state.justificativa)
-                st.success("Questão adicionada com sucesso!")
+#         with col1:
+#             if st.button("✅ Certo", key="btn_certo", use_container_width=True):
+#                 st.session_state.gabarito = "Certo"
 
-                sleep(1.5)
+#         with col2:
+#             if st.button("❌ Errado", key="btn_errado", use_container_width=True):
+#                 st.session_state.gabarito = "Errado"
 
-                st.cache_data.clear()
+#         # Mostrar gabarito selecionado com destaque
+#         if st.session_state.gabarito:
+#             if st.session_state.gabarito == "Certo":
+#                 st.success("Gabarito selecionado: ✅ Certo")
+#             else:
+#                 st.error("Gabarito selecionado: ❌ Errado")
 
-                st.session_state.assertiva = ""
-                st.session_state.justificativa = ""
-                st.session_state.gabarito = None
+#         st.session_state.justificativa = st.text_area("Justificativa", value=st.session_state.justificativa, key="justificativa_input")
+
+#         if st.button("Salvar Questão", type='primary'):
+#             if not st.session_state.gabarito:
+#                 st.warning("Selecione um gabarito antes de salvar a questão.")
+#             elif not st.session_state.assertiva.strip() or not st.session_state.justificativa.strip():
+#                 st.warning("Preencha todos os campos antes de salvar.")
+#             else:
+#                 adicionar_questao(materia, 
+#                                 assunto, 
+#                                 st.session_state.assertiva, 
+#                                 st.session_state.gabarito, 
+#                                 st.session_state.justificativa)
+#                 st.success("Questão adicionada com sucesso!")
+
+#                 sleep(1.5)
+
+#                 st.cache_data.clear()
+
+#                 st.session_state.assertiva = ""
+#                 st.session_state.justificativa = ""
+#                 st.session_state.gabarito = None
                 
-                # Força a interface a atualizar os campos
-                st.rerun()
+#                 # Força a interface a atualizar os campos
+#                 st.rerun()
 
             
+
+    if assunto:
+        with st.form("form_adicionar_questao", border=False):
+            st.session_state.assertiva = st.text_area(
+                "Assertiva", 
+                value=st.session_state.assertiva, 
+                key="assertiva_input"
+            )
+
+            col1, col2 = st.columns(2)
+            with col1:
+                if st.form_submit_button("✅ Certo", use_container_width=True):
+                    st.session_state.gabarito = "Certo"
+            with col2:
+                if st.form_submit_button("❌ Errado", use_container_width=True):
+                    st.session_state.gabarito = "Errado"
+
+            # Mostra o gabarito escolhido
+            if st.session_state.gabarito:
+                if st.session_state.gabarito == "Certo":
+                    st.success("Gabarito selecionado: ✅ Certo")
+                else:
+                    st.error("Gabarito selecionado: ❌ Errado")
+
+            st.session_state.justificativa = st.text_area(
+                "Justificativa", 
+                value=st.session_state.justificativa, 
+                key="justificativa_input"
+            )
+
+            submit = st.form_submit_button("💾 Salvar Questão", use_container_width=True)
+
+            if submit:
+                if not st.session_state.gabarito:
+                    st.warning("Selecione um gabarito antes de salvar a questão.")
+                elif not st.session_state.assertiva.strip() or not st.session_state.justificativa.strip():
+                    st.warning("Preencha todos os campos antes de salvar.")
+                else:
+                    adicionar_questao(
+                        materia, 
+                        assunto, 
+                        st.session_state.assertiva, 
+                        st.session_state.gabarito, 
+                        st.session_state.justificativa
+                    )
+                    st.success("Questão adicionada com sucesso!")
+                    sleep(1.5)
+                    st.cache_data.clear()
+
+                    st.session_state.assertiva = ""
+                    st.session_state.justificativa = ""
+                    st.session_state.gabarito = None
+                    st.rerun()

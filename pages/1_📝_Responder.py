@@ -27,7 +27,7 @@ if materia:
             with st.expander(f"Questão {q['ordem']}"):
                 st.write(q["assertiva"])
                 resposta = st.radio("Sua resposta:", ["Certo", "Errado"], index=None, key=f"resposta_{q['id']}")
-                if st.button("Confirmar", key=f"confirmar_{q['id']}"):
+                if st.button("Confirmar", key=f"confirmar_{q['id']}", type='primary'):
                     correto = resposta == q["gabarito"]
                     if correto:
                         st.success("✅ Muito bom, você é o(a) melhor!")

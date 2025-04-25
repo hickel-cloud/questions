@@ -22,7 +22,7 @@ def login():
     usuario = st.text_input("Usuário")
     senha = st.text_input("Senha", type="password")
 
-    if st.button("Entrar"):
+    if st.button("Entrar", type='primary'):
         if autenticar_usuario(usuario, senha):
             st.session_state["logado"] = True
             st.session_state["usuario"] = usuario
